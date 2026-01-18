@@ -1,0 +1,16 @@
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  name: microservice-alerts
+spec:
+  groups:
+  - name: microservice
+    interval: 30s
+    rules:
+    - alert: HighMemoryUsage
+      expr: container_memory_usage_bytes{pod=~".*microservice.*"} > 450000000
+      for: 5m
+      labels:
+        severity: warning
+      annotations:
+        summary: "High memory usage detected"
